@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mon Évidence ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* Toujours aucun scroll */
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+        }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly; /* Distribue l'espace intelligemment */
+            width: 100%;
+            height: 100%; /* Occupe toute la hauteur dispo */
+            max-width: 500px;
+            padding: 10px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* Phrase romantique */
+        .romantic-quote {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            color: #ffffff;
+            margin: 5px 0;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 1.5s ease-out;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+            flex-shrink: 1;
+        }
+
+        /* Vidéo format TikTok légèrement agrandie */
+        .video-container {
+            width: 100%;
+            max-width: 280px;
+            height: 42vh; /* Agrandie à 42% de la hauteur écran */
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            background: #000;
+            flex-shrink: 0; /* Empêche la vidéo de s'écraser */
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* GIF Love */
+        .love-gif {
+            max-height: 100px; /* Taille contrôlée pour laisser de la place */
+            width: auto;
+            border-radius: 10px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 1;
+        }
+
+        /* Bouton "Une lettre pour toi" - PRIORITÉ AFFICHAGE */
+        .letter-btn {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 1s ease-out;
+            flex-shrink: 0; /* INTERDIT de disparaître ou rétrécir */
+            margin-bottom: 10px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(255, 77, 109, 0.7); }
+            100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4); }
+        }
+
+        .blink-active {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .reveal {
+            opacity: 1 !important;
+            transform: translateY(0) scale(1) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <div class="romantic-quote" id="quote">
+            Tu n'es plus seulement un choix, tu es devenue ma plus belle évidence et mon seul horizon. ❤️
+        </div>
+
+        <div class="video-container">
+            <video id="coupleVideo" autoplay loop playsinline>
+                <source src="couple.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la vidéo.
+            </video>
+        </div>
+
+        <img src="love.gif" alt="Love" class="love-gif" id="loveGif">
+
+        <a href="letter.html" class="letter-btn" id="letterBtn">Une lettre pour toi</a>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const v = document.getElementById('coupleVideo');
+            v.play().catch(() => {
+                v.muted = true;
+                v.play();
+            });
+
+            // 1. Phrase après 10 secondes
+            setTimeout(() => {
+                document.getElementById('quote').classList.add('reveal');
+            }, 10000);
+
+            // 2. GIF + Bouton clignotant après 20 secondes
+            setTimeout(() => {
+                const gif = document.getElementById('loveGif');
+                const btn = document.getElementById('letterBtn');
+                
+                gif.classList.add('reveal');
+                btn.classList.add('reveal');
+                
+                setTimeout(() => {
+                    btn.classList.add('blink-active');
+                }, 1000);
+            }, 20000);
+        });
+    </script>
+</body>
+</html>

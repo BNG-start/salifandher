@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ma Lettre pour Toi ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        #musicToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 77, 109, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 95%;
+            max-width: 650px;
+            padding: 25px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            margin: 20px 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .letter-content {
+            text-align: left;
+            color: #333;
+            line-height: 1.6;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            width: 100%;
+        }
+
+        .letter-content h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2rem, 7vw, 3rem);
+            color: #ff4d6d;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Conteneur pour la signature et le GIF ensemble */
+        .signature-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 30px;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .signature-text {
+            flex: 1;
+            text-align: left; /* Alignement à gauche pour éviter que le texte ne soit poussé trop loin */
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: #ff4d6d;
+            line-height: 1.2;
+        }
+
+        .giff-img {
+            max-width: 80px; /* Taille réduite pour mobile */
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .blinking-heart {
+            font-size: 2.5rem;
+            color: #ff4d6d;
+            margin-top: 20px;
+            animation: heart-beat 1.2s infinite ease-in-out;
+        }
+
+        @keyframes heart-beat {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="myMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="musicToggle">Activer la Musique 🎵</button>
+
+    <div class="main-wrapper">
+        <div class="letter-content">
+            <h1>À mon amour...</h1>
+            <p>Chaque jour qui passe depuis mon départ est un défi...</p>
+            <p>Je me souviens de chaque éclat de rire partagé...</p>
+            <p>Tu es devenue la mélodie douce qui rythme mes pensées...</p>
+            <p>Sache que mon cœur ne connaît pas la distance. Il bat pour toi, intensément, à chaque instant, tissant un lien invisible mais incassable entre nous. Les retrouvailles ne seront que plus belles, plus passionnées, et je les imagine déjà, douces et éternelles.</p>
+            
+            <div class="signature-container">
+                <div class="signature-text">
+                    Avec tout l'amour qui me consume,<br>
+                    Ton éternel amoureux <br>
+                    Salif.
+                </div>
+                <img src="giff.gif" alt="Amour" class="giff-img">
+            </div>
+        </div>
+
+        <div class="blinking-heart">❤️</div>
+    </div>
+
+    <script>
+        const music = document.getElementById('myMusic');
+        const btn = document.getElementById('musicToggle');
+        function playMusic() {
+            music.play().then(() => { btn.style.display = 'none'; });
+        }
+        document.body.addEventListener('click', playMusic, { once: true });
+        btn.addEventListener('click', playMusic);
+    </script>
+</body>
+</html>
