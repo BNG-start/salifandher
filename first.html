@@ -11,7 +11,7 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Aligné en haut pour permettre le scroll fluide */
+            align-items: flex-start;
             min-height: 100vh;
             background: url('background.png') no-repeat center center fixed;
             background-size: cover;
@@ -28,6 +28,24 @@
             z-index: 0;
         }
 
+        /* Bouton de secours (invisible si le son marche déjà) */
+        #unmuteBtn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 77, 109, 0.9);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: none; 
+        }
+
         .main-wrapper {
             position: relative;
             z-index: 1;
@@ -36,20 +54,19 @@
             align-items: center;
             width: 90%;
             max-width: 600px;
-            padding: 40px 0; /* Espace en haut et en bas */
+            padding: 40px 0;
             text-align: center;
         }
 
-        /* Texte romantique */
         .romantic-text {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(1.5rem, 6vw, 2.5rem);
             color: #ffffff;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             opacity: 0;
             transform: translateY(-20px);
             transition: all 1s ease-out;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
         }
 
         .video-container {
@@ -59,13 +76,12 @@
 
         video {
             width: 100%;
-            max-height: 40vh; /* Taille adaptée pour mobile */
+            max-height: 45vh;
             border-radius: 15px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             object-fit: cover;
         }
 
-        /* GIF "Bisou" placé en bas de la vidéo */
         .bisou-gif {
             max-width: 120px;
             margin-top: 10px;
@@ -76,12 +92,11 @@
             transition: all 1s ease-out;
         }
 
-        /* Bouton en bas */
         .next-btn {
             background-color: #ff4d6d;
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 15px 45px;
             font-size: 1.2rem;
             font-weight: 600;
             border-radius: 50px;
@@ -95,24 +110,24 @@
         }
 
         @keyframes clignoter {
-            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4); }
-            50% { transform: scale(1.08); box-shadow: 0 8px 25px rgba(255, 77, 109, 0.7); }
-            100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
         }
 
         .blink-active {
             animation: clignoter 1.5s infinite ease-in-out;
         }
 
-        /* Classes d'apparition */
         .reveal {
             opacity: 1 !important;
             transform: translateY(0) scale(1) !important;
         }
-
     </style>
 </head>
 <body>
+
+    <button id="unmuteBtn">Appuie pour le son 🔊</button>
 
     <div class="main-wrapper">
         <div class="romantic-text" id="text">
@@ -120,9 +135,8 @@
         </div>
 
         <div class="video-container">
-            <video id="romanticVideo" autoplay loop playsinline>
+            <video id="romanticVideo" loop playsinline>
                 <source src="firstv.mp4" type="video/mp4">
-                Votre navigateur ne supporte pas la vidéo.
             </video>
         </div>
 
@@ -132,33 +146,50 @@
     </div>
 
     <script>
+        const v = document.getElementById('romanticVideo');
+        const unmuteBtn = document.getElementById('unmuteBtn');
+
+        function enableSound() {
+            v.muted = false;
+            v.volume = 1.0;
+            v.play();
+            unmuteBtn.style.display = 'none';
+        }
+
         window.addEventListener('load', () => {
-            const v = document.getElementById('romanticVideo');
+            // Puisque index.html a débloqué l'audio, on tente de jouer direct avec son
+            v.muted = false; 
             v.play().catch(() => {
+                // Si Safari bloque quand même, on met en muet pour que l'image bouge au moins
                 v.muted = true;
                 v.play();
+                // Et on montre le bouton de secours
+                unmuteBtn.style.display = 'block';
             });
 
-            // 1. Texte après 3 secondes
+            // Si elle touche n'importe où, on essaie d'activer le son
+            document.body.addEventListener('click', enableSound, { once: true });
+            unmuteBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Évite le double clic
+                enableSound();
+            });
+
+            // Animations
             setTimeout(() => {
                 document.getElementById('text').classList.add('reveal');
-            }, 3000);
+            }, 2000);
 
-            // 2. GIF après 6 secondes
             setTimeout(() => {
                 document.getElementById('gif').classList.add('reveal');
-            }, 6000);
+            }, 5000);
 
-            // 3. Bouton après 15 secondes
             setTimeout(() => {
                 const btn = document.getElementById('btn');
                 btn.classList.add('reveal');
-                
-                // Active le clignotement après l'animation d'apparition
                 setTimeout(() => {
                     btn.classList.add('blink-active');
                 }, 1000);
-            }, 18000);
+            }, 15000); // Réduit un peu le temps à 15s pour que ce soit moins long
         });
     </script>
 </body>
