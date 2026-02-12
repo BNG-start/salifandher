@@ -57,10 +57,9 @@
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(2.5rem, 8vw, 3.5rem); /* Taille adaptable */
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
             color: #ff4d6d;
             margin-bottom: 25px;
-            /* Contour blanc et ombres multiples pour un contraste maximal */
             text-shadow: 
                 -2px -2px 0 #fff,  
                  2px -2px 0 #fff,
@@ -182,7 +181,30 @@
         });
 
         yesBtn.addEventListener('click', () => {
-            window.location.href = "first.html";
+            // --- MODIFICATION : DÉBLOCAGE AUDIO GLOBAL ---
+            // On crée le contexte audio
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                const audioCtx = new AudioContext();
+                
+                // On crée et joue un silence instantané pour déverrouiller Safari/Snap
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.value = 0; // Muet
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                oscillator.start(0);
+                oscillator.stop(0.1);
+
+                // On attend que le contexte soit actif avant de changer de page
+                audioCtx.resume().then(() => {
+                    window.location.href = "first.html";
+                });
+            } else {
+                // Si le navigateur est trop vieux, on change juste de page
+                window.location.href = "first.html";
+            }
         });
     </script>
 </body>
